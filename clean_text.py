@@ -1,17 +1,25 @@
 import os
 
+def remove_special_characters(text):
+    special_characters = '!¡¿?«»“”@#$%^&*()[]{};:,./<>?\|`~-=_+"•0123456789'
+    for character in special_characters:
+        text = text.replace(character, '')
+    return text
+
 def read_text(path):
 
     with open(path, 'r') as f:
         text = f.read()
 
-    words = text.split()
+    text_clean = remove_special_characters(text)
+    words = text_clean.split()
     words = [word.strip('.,!?:;') for word in words]
     words = [word.lower() for word in words]
 
     return words
 
 def count_words(words, count_words):
+
     for word in words:
         if word in count_words:
             count_words[word] += 1
@@ -43,7 +51,7 @@ def write_output(count_words, category):
 def main(path_data, excluded=None):
     for category in os.listdir(path_data):
         res = dict()
-        path_category = f'./noticias/{category}/'
+        path_category = f'./{path_data}/{category}/train/'
         files = os.listdir(path_category)
         
         for file in files:
@@ -58,4 +66,4 @@ def main(path_data, excluded=None):
         
 if __name__ == '__main__':
     # Get the current working directory
-    main('./noticias', excluded='./stop_words_2.txt')
+    main('./dataset', excluded='./stop_words_2.txt')
