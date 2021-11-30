@@ -3,7 +3,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 
-def get_noticias(url_list):
+def get_noticias(url_list, newsMemory):
     url_noticias = []
     print('list: ', url_list)
     req = Request(url_list, headers={'User-Agent': 'Mozilla/5.0'})
@@ -15,12 +15,16 @@ def get_noticias(url_list):
         url = noticia.find('a')
         sturl = str(url)
         print('url: ', sturl)
-        if 'href="https://okdiario.com/espana/' in sturl and not 'ultimas-noticias' in sturl:
+        if 'href="https://okdiario.com/noticias/coronavirus' in sturl and not 'ultimas-noticias' in sturl:
             index1 = sturl.index('href="https:/')
             index2 = sturl.index('\"', index1+13)
-            url_noticias.append(sturl[index1+13:index2-1])
-            print('cut url: ', sturl)
-    return url_noticias
+            newUrl = sturl[index1+13:index2-1]
+            if not newUrl in newsMemory:
+
+                url_noticias.append(newUrl)
+                newsMemory = newsMemory + newUrl
+                print('cut url: ', sturl)
+    return url_noticias, newsMemory
 
 def count_words(texto):
     words = texto.split()
@@ -53,7 +57,7 @@ def get_texto_noticias(url, palabras_documento):
 
 def escribe_notica(texto, path):
     position = len(os.listdir(path))
-    file_name = f'{path}/{position}.txt'
+    file_name = f'{path}/{position+59}.txt'
     with open(file_name, 'w', encoding='utf-8') as f:
         f.write(texto)
 
@@ -62,11 +66,12 @@ def main(url_base, url_categoria, init_page, folder_path, documentos_totales, pa
 
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
-
+    newsMemory = str('')
     while len(os.listdir(folder_path)) < documentos_totales:
         url_list = f'{url_categoria}/'
-        url_noticias = get_noticias(url_list)
+        url_noticias, newsMemory = get_noticias(url_list, newsMemory)
         init_page -= 1
+        print ('memory: ', newsMemory)
         for url in url_noticias:
             if len(os.listdir(folder_path)) > documentos_totales:
                 break
@@ -82,9 +87,9 @@ if __name__ == '__main__':
     palabras_documento = 300
 
     temas = [
-        #('okdiario.com/deportes', 'deportes', 1788),
-        ('okdiario.com/espana', 'politica', 1489)#,
-        #('okdiario.com/salud', 'salud', 140)
+        #('okdiario.com/deportes', 'deportes2', 1788),
+        #('okdiario.com/espana', 'politica', 1489)#,
+        ('okdiario.com/noticias/coronavirus', 'salud2', 140)
         ]
 
     for categoria, folder_name, init_page in temas:
