@@ -78,5 +78,5 @@ if __name__ == '__main__':
     
     for categoria, folder_name, init_page in temas:
         url_categoria = f'{url_base}/{categoria}'
-        folder_path  = f'./noticias/{folder_name}'
+        folder_path  = f'../data/noticias/{folder_name}'
         main(url_base, url_categoria, init_page, folder_path, documentos_totales, palabras_documento)

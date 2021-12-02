@@ -41,10 +41,11 @@ def delete_excluded_words(path, sorted_count_words):
 def write_output(count_words, category):
     sorted_count_words = dict(sorted(count_words.items(), key=lambda x: x[1], reverse=True))
 
-    if not os.path.exists('./outputs/'):
-        os.makedirs('./outputs/')
+    file_path = '../data/outputs/'
+    if not os.path.exists(file_path):
+        os.makedirs(file_path)
 
-    with open(f'./outputs/{category}.txt', 'w') as f:
+    with open(f'{file_path}{category}.txt', 'w') as f:
         for word in sorted_count_words.keys():
             f.write(f'{word},{sorted_count_words[word]}\n')
 
@@ -66,4 +67,4 @@ def main(path_data, excluded=None):
         
 if __name__ == '__main__':
     # Get the current working directory
-    main('./dataset', excluded='./stop_words_2.txt')
+    main('../data/dataset', excluded='../stop_words.txt')
