@@ -45,25 +45,25 @@ def write_output(count_words, category):
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
-    with open(f'{file_path}{category}.txt', 'w', encoding='utf_8') as f:
+    with open(f'{file_path}test/{category}', 'a+', encoding='utf_8') as f:
         for word in sorted_count_words.keys():
             f.write(f'{word},{sorted_count_words[word]}\n')
 
 def main(path_data, excluded=None):
     for category in os.listdir(path_data):
-        res = dict()
-        path_category = f'./{path_data}/{category}/train/'
+        path_category = f'./{path_data}/{category}/test/'
         files = os.listdir(path_category)
 
         for file in files:
             path_file = f'{path_category}{file}'
             words = read_text(path_file)
+            res = dict()
             res = count_words(words, res)
 
             if excluded:
                 res = delete_excluded_words(excluded, res)
 
-            write_output(res, category)
+            write_output(res, category+'/'+file)
 
 if __name__ == '__main__':
     # Get the current working directory
