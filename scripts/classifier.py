@@ -18,13 +18,17 @@ def read_text(path):
 
     return words
 
-def count_words(words, count_words):
-
+def count_words_glossary(words, count_words):
+    for word in words:
+        if word in count_words:
+            count_words[word] += 1
+    return count_words
+def get_glossary_dictionary(words, count_words):
     for word in words:
         if word in count_words:
             count_words[word] += 1
         else:
-            count_words[word] = 1
+            count_words[word] = 0
 
     return count_words
 
@@ -39,17 +43,16 @@ def delete_excluded_words(path, sorted_count_words):
     return sorted_count_words
 
 def write_output(count_words, category):
-    sorted_count_words = dict(sorted(count_words.items(), key=lambda x: x[1], reverse=True))
 
     file_path = '../data/outputs/'
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
     with open(f'{file_path}test/{category}', 'a+', encoding='utf_8') as f:
-        for word in sorted_count_words.keys():
-            f.write(f'{word},{sorted_count_words[word]}\n')
+        for word in count_words.keys():
+            f.write(f'{word},{count_words[word]}\n')
 
-def main(path_data, excluded=None):
+def main(path_data, excluded=None, glossary_path=None):
     for category in os.listdir(path_data):
         path_category = f'./{path_data}/{category}/test/'
         files = os.listdir(path_category)
@@ -57,14 +60,13 @@ def main(path_data, excluded=None):
         for file in files:
             path_file = f'{path_category}{file}'
             words = read_text(path_file)
+            glossary = read_text(glossary_path)
             res = dict()
-            res = count_words(words, res)
-
-            if excluded:
-                res = delete_excluded_words(excluded, res)
+            glossary_dictionary = get_glossary_dictionary(glossary, res)
+            res = count_words_glossary(words, res)
 
             write_output(res, category+'/'+file)
 
 if __name__ == '__main__':
     # Get the current working directory
-    main('../data/dataset', excluded='../stop_words.txt')
+    main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossary.txt')
