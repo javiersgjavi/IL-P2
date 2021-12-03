@@ -1,4 +1,5 @@
 import os
+import numpy as np
 
 def remove_special_characters(text):
     special_characters = '!¡¿?«»“”@#$%^&*()[]{};:,./<>?\|`~-=_+"•0123456789'
@@ -64,7 +65,11 @@ def main(path_data, excluded=None, glossary_path=None):
             res = dict()
             glossary_dictionary = get_glossary_dictionary(glossary, res)
             res = count_words_glossary(words, res)
-
+            file_values = []
+            for word in res:
+                file_values.append(res[word])
+            vector_file = np.array(file_values)
+            print('vector: ' + str(vector_file))
             write_output(res, category+'/'+file)
 
 if __name__ == '__main__':
