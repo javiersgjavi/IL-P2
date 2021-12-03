@@ -53,7 +53,39 @@ def write_output(count_words, category):
         for word in count_words.keys():
             f.write(f'{word},{count_words[word]}\n')
 
-def main(path_data, excluded=None, glossary_path=None):
+def get_category_vector(path, glossary):
+        d = dict()
+        f = open(path)
+        for line in f:
+            line = line.strip('\n')
+            (key, val) = line.split(",")
+            d[key] = val
+        vector_values = []
+        for word in glossary:
+            if word in d:
+                vector_values.append(d[word])
+            else:
+                vector_values.append(0)
+
+        vector_category = np.array(vector_values)
+        print('vector category '+path+': ' + str(vector_category))
+        return vector_category
+
+def main(path_data, excluded=None, glossary_path=None, category_glossaries=None):
+
+
+
+    glossary = read_text(glossary_path)
+    glossary_dictionary = dict()
+    glossary_dictionary = get_glossary_dictionary(glossary, glossary_dictionary)
+
+
+    csvs = os.listdir(category_glossaries)
+
+    category_vector_dictionary = dict()
+    for category_csv in csvs:
+        category_vector_dictionary[category_csv] = get_category_vector(f'{category_glossaries}{category_csv}', glossary_dictionary)
+
     for category in os.listdir(path_data):
         path_category = f'./{path_data}/{category}/test/'
         files = os.listdir(path_category)
@@ -61,17 +93,14 @@ def main(path_data, excluded=None, glossary_path=None):
         for file in files:
             path_file = f'{path_category}{file}'
             words = read_text(path_file)
-            glossary = read_text(glossary_path)
-            res = dict()
-            glossary_dictionary = get_glossary_dictionary(glossary, res)
+            res = glossary_dictionary.copy()
             res = count_words_glossary(words, res)
             file_values = []
             for word in res:
                 file_values.append(res[word])
             vector_file = np.array(file_values)
-            print('vector: ' + str(vector_file))
             write_output(res, category+'/'+file)
 
 if __name__ == '__main__':
     # Get the current working directory
-    main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossary.txt')
+    main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossary.txt', category_glossaries = '../data/outputs/tf-idf/30/')
