@@ -55,7 +55,7 @@ def write_output(count_words, category):
 
 def get_category_vector(path, glossary):
         d = dict()
-        f = open(path)
+        f = open(path, encoding='utf_8')
         for line in f:
             line = line.strip('\n')
             (key, val) = line.split(",")
@@ -68,6 +68,7 @@ def get_category_vector(path, glossary):
                 vector_values.append(0)
 
         vector_category = np.array(vector_values, dtype=float)
+        print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
 def get_category_count_vector(path, glossary):
         words = read_text(path)
@@ -124,7 +125,7 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
     txts = os.listdir(contador_outputs)
     category_vector_dictionary = dict()
     for category_txt in txts:
-        category_vectors.append(get_category_count_vector(f'{contador_outputs}{category_txt}', glossary_dictionary))
+        category_vectors.append(get_category_vector(f'{contador_outputs}{category_txt}', glossary_dictionary))
 
     counter = 0
     right_guesses_counter = 0
