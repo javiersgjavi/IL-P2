@@ -69,7 +69,20 @@ def get_category_vector(path, glossary):
 
         vector_category = np.array(vector_values, dtype=float)
         return vector_category
+def get_category_count_vector(path, glossary):
+        words = read_text(path)
+        d = glossary.copy()
+        d = count_words_glossary(words, d)
+        vector_values = []
+        for word in glossary:
+            if word in d:
+                vector_values.append(d[word])
+            else:
+                vector_values.append(0)
 
+        vector_category = np.array(vector_values, dtype=float)
+        print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
+        return vector_category
 def main(path_data, excluded=None, glossary_path=None, category_glossaries=None):
     glossary = read_text(glossary_path)
     glossary_dictionary = dict()
@@ -100,10 +113,18 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
             print('category: '+category+' vector: ' + str(vector_file))
             write_output(res, category+'/'+file)
 
-    csvs = os.listdir(category_glossaries)
+    #COMMENTED: CATEGORY VECTORS WITH TF-IDF
+
+    #csvs = os.listdir(category_glossaries)
+    #category_vector_dictionary = dict()
+    #for category_csv in csvs:
+        #category_vectors.append(get_category_vector(f'{category_glossaries}{category_csv}', glossary_dictionary))
+
+    contador_outputs = '../data/outputs/contador/'
+    txts = os.listdir(contador_outputs)
     category_vector_dictionary = dict()
-    for category_csv in csvs:
-        category_vectors.append(get_category_vector(f'{category_glossaries}{category_csv}', glossary_dictionary))
+    for category_txt in txts:
+        category_vectors.append(get_category_count_vector(f'{contador_outputs}{category_txt}', glossary_dictionary))
 
     counter = 0
     right_guesses_counter = 0
