@@ -123,6 +123,7 @@ fui
 fuimos
 gueno
 ha
+haber
 había
 hace
 haces
@@ -135,6 +136,7 @@ hago
 han
 hasta
 hay
+haya
 he
 incluso
 intenta
@@ -301,6 +303,7 @@ tras
 tú
 tu
 tus
+tuvo
 tuya
 tuyo
 tuyas

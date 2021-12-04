@@ -45,7 +45,7 @@ def write_output(count_words, category):
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
-    with open(f'{file_path}glossary.txt', 'w', encoding='utf_8') as f:
+    with open(f'{file_path}glossary_50.txt', 'w', encoding='utf_8') as f:
         for word in sorted_count_words.keys():
             f.write(f'{word},\n')
 
@@ -66,4 +66,4 @@ def main(path_data, excluded=None):
 
 if __name__ == '__main__':
     # Get the current working directory
-    main('../data/outputs/tf-idf/30/', excluded='../stop_words.txt')
+    main('../data/outputs/tf-idf/50/', excluded='../stop_words.txt')

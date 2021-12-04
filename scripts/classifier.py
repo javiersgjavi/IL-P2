@@ -166,4 +166,4 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
 
 if __name__ == '__main__':
     # Get the current working directory
-    main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossary.txt', category_glossaries = '../data/outputs/tf-idf/30/')
+    main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossary_50.txt', category_glossaries = '../data/outputs/tf-idf/50/')

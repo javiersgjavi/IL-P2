@@ -17,12 +17,12 @@ def cargar_palabras(path):
     indice = set()
     for i in range(len(output)):
         palabras = output[i][0]
-        for palabra in palabras: 
+        for palabra in palabras:
             indice.add(palabra)
 
     data['palabras'] = list(indice)
     data = data.set_index('palabras')
-    
+
     for index, f in enumerate(os.listdir(path)):
         palabras_categoria = output[index].set_index(0)
         column_name = f.split('.')[0]
@@ -36,7 +36,7 @@ def cargar_palabras(path):
                 column_values.append(0)
 
         data[column_name] = column_values
-        
+
     return data
 
 def calculate_idf(data):
@@ -49,7 +49,7 @@ def calculate_idf(data):
 
         value = np.log10(N_documentos/n_documentos)
         idf_values.append(value)
-        
+
     data['idf'] = idf_values
     return data
 
@@ -57,8 +57,8 @@ def calculate_idf(data):
 
 
 def calculate_tf_idf(data):
-    
-    
+
+
     categories = data.columns[:-1]
     for category in categories:
         max_value = np.max(data[category])
@@ -85,11 +85,25 @@ def get_glosaries(data, path):
 
     for category in data.columns[-3:]:
         data_category = data[category].sort_values(ascending=False)
-        
+
         data_category.to_csv(f'{path_all}{category}.csv')
         data_category.iloc[:30].to_csv(f'{path_30}{category}.csv')
+def get_glosaries_50(data, path):
 
-def main(path): 
+    path_all = f'{path}/todos_50/'
+    path_50 = f'{path}/50/'
+    if not os.path.exists(path_all):
+        os.makedirs(path_all)
+
+    if not os.path.exists(path_50):
+        os.makedirs(path_50)
+
+    for category in data.columns[-3:]:
+        data_category = data[category].sort_values(ascending=False)
+
+        data_category.to_csv(f'{path_all}{category}.csv')
+        data_category.iloc[:50].to_csv(f'{path_50}{category}.csv')
+def main(path):
     path_output = '../data/outputs/tf-idf/'
     if not os.path.exists(path_output):
         os.makedirs(path_output)
@@ -97,11 +111,11 @@ def main(path):
     data = cargar_palabras(path)
     data = calculate_idf(data)
     data = calculate_tf_idf(data)
-    
+
     data.to_csv(f'{path_output}/tf-idf.csv')
 
-    get_glosaries(data, path_output)
-        
+    get_glosaries_50(data, path_output)
+
 
 if __name__ == '__main__':
     main('../data/outputs/contador/')
