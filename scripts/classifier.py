@@ -68,6 +68,11 @@ def get_category_vector(path, glossary):
                 vector_values.append(0)
 
         vector_category = np.array(vector_values, dtype=float)
+        max_value = np.amax(vector_category)
+        contador = 0
+        for value in vector_category:
+            vector_category[contador] = value/max_value
+            contador += 1
         print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
 def get_category_count_vector(path, glossary):
