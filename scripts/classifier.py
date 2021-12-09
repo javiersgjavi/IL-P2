@@ -24,6 +24,7 @@ def count_words_glossary(words, count_words):
         if word in count_words:
             count_words[word] += 1
     return count_words
+
 def get_glossary_dictionary(words, count_words):
     for word in words:
         if word in count_words:
@@ -75,6 +76,7 @@ def get_category_vector(path, glossary):
             contador += 1
         print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
+
 def get_category_count_vector(path, glossary):
         words = read_text(path)
         d = glossary.copy()
@@ -89,6 +91,7 @@ def get_category_count_vector(path, glossary):
         vector_category = np.array(vector_values, dtype=float)
         print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
+        
 def main(path_data, excluded=None, glossary_path=None, category_glossaries=None):
     glossary = read_text(glossary_path)
     glossary_dictionary = dict()
