@@ -227,6 +227,7 @@ que
 qué
 querer
 quién
+quien
 quíenes
 quienesquiera
 quienquiera

@@ -19,6 +19,7 @@ def read_text(path):
     return words
 
 def count_words(words, count_words):
+    
 
     for word in words:
         if word in count_words:
@@ -38,7 +39,7 @@ def delete_excluded_words(path, sorted_count_words):
 
     return sorted_count_words
 
-def write_output(count_words, category):
+def write_output(count_words):
     sorted_count_words = dict(sorted(count_words.items(), key=lambda x: x[1], reverse=True))
 
     file_path = '../data/outputs/'
@@ -47,22 +48,23 @@ def write_output(count_words, category):
 
     with open(f'{file_path}glossary_50.txt', 'w', encoding='utf_8') as f:
         for word in sorted_count_words.keys():
-            f.write(f'{word},\n')
+            if not word.startswith('palabrastfidf'):
+                f.write(f'{word},\n')
 
 def main(path_data, excluded=None):
-    for category in os.listdir(path_data):
-        res = dict()
-        files = os.listdir(path_data)
+    files = os.listdir(path_data)
+    res  = dict()
 
-        for file in files:
-            path_file = f'{path_data}{file}'
-            words = read_text(path_file)
-            res = count_words(words, res)
+    for file in files:
+        path_file = f'{path_data}{file}'
+        words = read_text(path_file)
+        res = count_words(words, res)
 
-            if excluded:
-                res = delete_excluded_words(excluded, res)
-
-            write_output(res, category)
+        if excluded:
+            res = delete_excluded_words(excluded, res)
+    
+   
+        write_output(res)
 
 if __name__ == '__main__':
     # Get the current working directory
