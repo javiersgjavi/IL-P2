@@ -6,7 +6,7 @@ def create_folder(folder_path):
         os.makedirs(folder_path)
 
 def main(input_path):
-    output_path = './dataset/'
+    output_path = './data/dataset/'
     create_folder(output_path)
 
     categories = os.listdir(input_path)

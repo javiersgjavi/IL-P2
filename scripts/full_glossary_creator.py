@@ -42,14 +42,14 @@ def delete_excluded_words(path, sorted_count_words):
 def write_output(count_words):
     sorted_count_words = dict(sorted(count_words.items(), key=lambda x: x[1], reverse=True))
 
-    file_path = '../data/outputs/glossaries/'
+    file_path = './data/outputs/glossaries/'
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
     with open(f'{file_path}glossary_50.txt', 'w', encoding='utf_8') as f:
         for word in sorted_count_words.keys():
-            if not word.startswith('palabrastfidf'):
-                f.write(f'{word},\n')
+            #if not word.startswith('palabrastfidf'):
+            f.write(f'{word},\n')
 
 def main(path_data, excluded=None):
     files = os.listdir(path_data)

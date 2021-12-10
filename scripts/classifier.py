@@ -44,13 +44,13 @@ def delete_excluded_words(path, sorted_count_words):
 
     return sorted_count_words
 
-def write_output(count_words, category):
+def write_output(count_words, category, file_name):
 
-    file_path = '../data/outputs/'
-    if not os.path.exists(file_path):
-        os.makedirs(file_path)
+    file_path = './data/outputs/test/'
+    if not os.path.exists(file_path+category):
+        os.makedirs(file_path+category)
 
-    with open(f'{file_path}test/{category}', 'a+', encoding='utf_8') as f:
+    with open(f'{file_path}{category}{file_name}', 'a+', encoding='utf_8') as f:
         for word in count_words.keys():
             f.write(f'{word},{count_words[word]}\n')
 
@@ -120,7 +120,7 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
             file_vectors.append(vector_file)
 
             print('category: '+category+' vector: ' + str(vector_file))
-            write_output(res, category+'/'+file)
+            write_output(res, category, file)
 
     #COMMENTED: CATEGORY VECTORS WITH TF-IDF
 
@@ -129,7 +129,7 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
     #for category_csv in csvs:
         #category_vectors.append(get_category_vector(f'{category_glossaries}{category_csv}', glossary_dictionary))
 
-    contador_outputs = '../data/outputs/contador/'
+    contador_outputs = '../data/outputs/word_counter/'
     txts = os.listdir(contador_outputs)
     category_vector_dictionary = dict()
     for category_txt in txts:
@@ -162,11 +162,16 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
     total_size = len(file_vectors)
     accuracy = right_guesses_counter / total_size
     print('overall accuracy: ' + str(accuracy))
+    accuracy_category = dict()
     for category in category_right_guesses:
-        print(category + " accuracy: " + str(category_right_guesses[category]/(total_size/3)))
+        accuracy_cat = category_right_guesses[category]/(total_size/3)
+        accuracy_category[category] = accuracy_cat
+        print(category + " accuracy: " + str(accuracy_cat))
+
+    return accuracy, accuracy_category
 
 
 
 if __name__ == '__main__':
     # Get the current working directory
-    main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossary_50.txt', category_glossaries = '../data/outputs/tf-idf/50/')
+    _ = main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossary_50.txt', category_glossaries = '../data/outputs/tf-idf/50/')

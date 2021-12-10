@@ -40,8 +40,8 @@ def delete_excluded_words(path, sorted_count_words):
 
 def write_output(count_words, category):
     sorted_count_words = dict(sorted(count_words.items(), key=lambda x: x[1], reverse=True))
+    file_path = './data/outputs/word_counter/'
 
-    file_path = '../data/outputs/'
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
