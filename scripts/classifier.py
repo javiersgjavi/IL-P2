@@ -8,7 +8,7 @@ def remove_special_characters(text):
     return text
 
 def read_text(path):
-
+    print('Path: '+ path)
     with open(path, 'r', encoding='utf_8') as f:
         text = f.read()
 
@@ -91,8 +91,8 @@ def get_category_count_vector(path, glossary):
         vector_category = np.array(vector_values, dtype=float)
         print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
-        
-def main(path_data, excluded=None, glossary_path=None, category_glossaries=None):
+
+def main(path_data, excluded=None, glossary_path=None, contador_outputs=None):
     glossary = read_text(glossary_path)
     glossary_dictionary = dict()
     glossary_dictionary = get_glossary_dictionary(glossary, glossary_dictionary)
@@ -129,7 +129,6 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
     #for category_csv in csvs:
         #category_vectors.append(get_category_vector(f'{category_glossaries}{category_csv}', glossary_dictionary))
 
-    contador_outputs = '../data/outputs/word_counter/'
     txts = os.listdir(contador_outputs)
     category_vector_dictionary = dict()
     for category_txt in txts:
@@ -174,4 +173,4 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
 
 if __name__ == '__main__':
     # Get the current working directory
-    _ = main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossary_50.txt', category_glossaries = '../data/outputs/tf-idf/50/')
+    _ = main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossaries/glossary_50.txt', contador_outputs = '../data/outputs/word_counter/')

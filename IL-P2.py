@@ -22,7 +22,7 @@ def button_glossary():
     messagebox.showinfo("Generate_glossary", "Glossary generated successfully")
 
 def button_classifier():
-    accuracy, cat_accuracy = classifier.main('./data/dataset', excluded='./stop_words.txt', glossary_path='../data/outputs/glossaries/glossary_50.txt', category_glossaries='../data/outputs/tf-idf/50/')
+    accuracy, cat_accuracy = classifier.main('./data/dataset', excluded='./stop_words.txt', glossary_path='./data/outputs/glossaries/glossary_50.txt', contador_outputs='./data/outputs/word_counter/')
     message = f'Accuracy = {accuracy}\n\nAccuracy by category:\n'
     for category in cat_accuracy.keys():
         message += f'\n\t{category} = {str(cat_accuracy[category])}'
@@ -46,7 +46,7 @@ def main():
     menu.add_command(label="1- Generate_dataset", command=button_generate_dataset)
 
     # Generate words count
-    
+
     menu.add_command(label="2- Generate_words_count", command=button_words_count)
 
     # Generate TF-IDF
@@ -56,10 +56,10 @@ def main():
     menu.add_command(label="4- Generate_glossary", command=button_glossary)
 
     # Classify
-    menu.add_command(label="5- Classify", command=button_classifier) 
+    menu.add_command(label="5- Classify", command=button_classifier)
 
     # Restart configuration
-    menu.add_command(label="Restart_repository", command=button_restart) 
+    menu.add_command(label="Restart_repository", command=button_restart)
 
     #menu.add_cascade(label="Dataset", menu=menudatos)
 
