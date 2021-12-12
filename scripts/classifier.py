@@ -9,7 +9,6 @@ def remove_special_characters(text):
     return text
 
 def read_text(path):
-    #print('Path: '+ path)
     with open(path, 'r', encoding='utf_8') as f:
         text = f.read()
 
@@ -75,7 +74,6 @@ def get_category_vector(path, glossary):
         for value in vector_category:
             vector_category[contador] = value/max_value
             contador += 1
-        #print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
 
 def get_category_count_vector(path, glossary):
@@ -90,7 +88,6 @@ def get_category_count_vector(path, glossary):
                 vector_values.append(0)
 
         vector_category = np.array(vector_values, dtype=float)
-        #print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
 
 def main(path_data, glossary_path=None, contador_outputs=None, similarities_path = None):
@@ -103,12 +100,9 @@ def main(path_data, glossary_path=None, contador_outputs=None, similarities_path
     file_vectors = []
     real_categories = []
 
-
     accuracy_table = pd.DataFrame()
     file_index = []
     similarity_list = []
-
-    
 
     for category in np.sort(os.listdir(path_data)):
         categories.append(category)
@@ -137,7 +131,6 @@ def main(path_data, glossary_path=None, contador_outputs=None, similarities_path
                 for line in originalFile:
                     copiedFile.write(line)
 
-            #print('category: '+category+' vector: ' + str(vector_file))
             write_output(res, category, file)
         print('Document length: ' + str(len(file_index)))
     accuracy_table['Documentos'] = list(file_index)
@@ -163,8 +156,6 @@ def main(path_data, glossary_path=None, contador_outputs=None, similarities_path
                 max_value = similarity
                 predicted_category = categories[category_counter]
 
-            #print('file'+str(counter)+ ' '+ str(categories[category_counter])+ ': ' + str(similarity))
-
             category_counter += 1
         predicted_categories.append(predicted_category)
         similarity_list.append(max_value)
@@ -186,6 +177,7 @@ def main(path_data, glossary_path=None, contador_outputs=None, similarities_path
         counter += 1
     total_size = len(file_vectors)
     accuracy = right_guesses_counter / total_size
+    print('\n------------------')
     print('overall accuracy: ' + str(accuracy))
     accuracy_category = dict()
     for category in category_right_guesses:
@@ -194,10 +186,11 @@ def main(path_data, glossary_path=None, contador_outputs=None, similarities_path
         accuracy_cat = category_right_guesses[category]/(total_size/3)
         accuracy_category[category] = accuracy_cat
         print(category + " accuracy: " + str(accuracy_cat))
-    #accuracy_table = data[category].sort_values(ascending=False)
 
-    accuracy_table.to_csv(f'./data/outputs/similarity.csv')
-    #accuracy_table.iloc[:100].to_csv(f'{path_100}{category}.csv')
+    accuracy_table.to_csv(f'../data/outputs/similarity.csv')
+    print('------------------\n')
+
+    print('Classification finished')
     return accuracy, accuracy_category
 
 

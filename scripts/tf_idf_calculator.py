@@ -30,18 +30,12 @@ def cargar_palabras(path):
 
         for palabra in data.index:
             if palabra in palabras_categoria.index:
-                if palabra == 'número':
-                    print(palabras_categoria.loc[palabra].values[0])
-                    print(column_values)
                 column_values.append(palabras_categoria.loc[palabra].values[0])
 
             else:
                 column_values.append(0)
 
-        print(column_values)
-
         data[column_name] = column_values
-        print(data.loc['número'])
 
     return data
 
@@ -136,7 +130,6 @@ def get_glosaries_50(data, path):
         data_category = data.sort_values(by=[category, 'palabras'], ascending=(False, True))[category]
 
         data_category.to_csv(f'{path_all}{category}.csv')
-        print(category)
         data_category.iloc[:50].to_csv(f'{path_50}{category}.csv')
 
 def get_glosaries_60(data, path):
@@ -201,6 +194,8 @@ def main(path):
     data.to_csv(f'{path_output}/tf-idf.csv')
 
     get_glosaries_50(data, path_output)
+
+    print('TF-IDF calculated succesfully')
 
 
 if __name__ == '__main__':

@@ -52,7 +52,7 @@ def write_output(count_words, category):
 def main(path_data, excluded=None):
     for category in os.listdir(path_data):
         res = dict()
-        path_category = f'../{path_data}/{category}/train/'
+        path_category = f'./{path_data}/{category}/train/'
         files = os.listdir(path_category)
 
         for file in files:
@@ -64,6 +64,8 @@ def main(path_data, excluded=None):
                 res = delete_excluded_words(excluded, res)
 
             write_output(res, category)
+
+    print('Words counted succesfully')
 
 if __name__ == '__main__':
     # Get the current working directory

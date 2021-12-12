@@ -26,7 +26,7 @@ def main(input_path):
             else:
                 shutil.copy(f'{category_path}{f}', f'{test_path}{f}')
 
-
+    print('Dataset generated successfully')
 
 
 if __name__=='__main__':

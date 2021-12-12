@@ -10,7 +10,7 @@ def button_generate_dataset():
     messagebox.showinfo("Generate_dataset", "Dataset generated successfully")
 
 def button_words_count():
-    get_words_count.main('../data/dataset', excluded='./stop_words.txt')
+    get_words_count.main('../data/dataset', excluded='../stop_words.txt')
     messagebox.showinfo("Generate_words_count", "Words count generated successfully")
 
 def button_tf_idf():
@@ -18,11 +18,11 @@ def button_tf_idf():
     messagebox.showinfo("Generate_TF-IDF", "TF-IDF calculated successfully")
 
 def button_glossary():
-    full_glossary_creator.main('../data/outputs/tf-idf/50/', excluded='./stop_words.txt')
+    full_glossary_creator.main('../data/outputs/tf-idf/50/', excluded='../stop_words.txt')
     messagebox.showinfo("Generate_glossary", "Glossary generated successfully")
 
 def button_classifier():
-    accuracy, cat_accuracy = classifier.main('../data/dataset', glossary_path='./data/outputs/glossaries/glossary_50.txt', contador_outputs='./data/outputs/word_counter/', similarities_path = './data/outputs/ordered_by_similarity/')
+    accuracy, cat_accuracy = classifier.main('../data/dataset', glossary_path='../data/outputs/glossaries/glossary_50.txt', contador_outputs='../data/outputs/word_counter/', similarities_path = '../data/outputs/ordered_by_similarity/')
     message = f'Accuracy = {accuracy}\n\nAccuracy by category:\n'
     for category in cat_accuracy.keys():
         message += f'\n\t{category} = {str(cat_accuracy[category])}'

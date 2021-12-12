@@ -66,6 +66,8 @@ def main(path_data, excluded=None):
     
    
         write_output(res)
+        
+    print('Glossary created successfully')
 
 if __name__ == '__main__':
     # Get the current working directory
