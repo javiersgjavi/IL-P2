@@ -68,4 +68,4 @@ def main(path_data, excluded=None):
 
 if __name__ == '__main__':
     # Get the current working directory
-    main('../data/outputs/tf-idf/50/', excluded='../stop_words.txt')
+    main('./data/outputs/tf-idf/50/', excluded='./stop_words.txt')

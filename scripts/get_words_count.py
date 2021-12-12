@@ -1,7 +1,7 @@
 import os
 
 def remove_special_characters(text):
-    special_characters = '!¡¿?«»“”@#$%^&*()[]{};:,./<>?\|`~-=_+"•0123456789'
+    special_characters = "!¡¿?«»“”@#$%^&*()[]{};:,./<>?\|`~-=_+\"'•0123456789"
     for character in special_characters:
         text = text.replace(character, '')
     return text
