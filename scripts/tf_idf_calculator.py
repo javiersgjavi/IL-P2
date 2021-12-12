@@ -14,11 +14,13 @@ def cargar_palabras(path):
     for index, f in enumerate(np.sort(os.listdir(path))):
         print(f)
         data_file = pd.read_csv(f'{path}{f}', header=None)
+        print(data_file.head())
         output[index] = data_file.iloc[:100]
 
     indice = set()
     for i in range(len(output)):
         palabras = output[i][0]
+        print(palabras.tolist(), len(palabras))
         for palabra in palabras:
             indice.add(palabra)
 
