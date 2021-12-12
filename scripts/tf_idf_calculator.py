@@ -23,7 +23,7 @@ def cargar_palabras(path):
     data['palabras'] = list(indice)
     data = data.set_index('palabras')
 
-    for index, f in enumerate(os.listdir(path)):
+    for index, f in enumerate(np.sort(os.listdir(path))):
         palabras_categoria = output[index].set_index(0)
         column_name = f.split('.')[0]
         column_values = []
@@ -133,10 +133,10 @@ def get_glosaries_50(data, path):
         os.makedirs(path_50)
 
     for category in data.columns[-3:]:
-        print(data)
         data_category = data.sort_values(by=[category, 'palabras'], ascending=(False, True))[category]
 
         data_category.to_csv(f'{path_all}{category}.csv')
+        print(category)
         data_category.iloc[:50].to_csv(f'{path_50}{category}.csv')
 
 def get_glosaries_60(data, path):

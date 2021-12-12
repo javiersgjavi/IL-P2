@@ -1,4 +1,5 @@
 import os
+import numpy as np
 
 def remove_special_characters(text):
     special_characters = "!¡¿?«»“”@#$%^&*()[]{};:,./<>?\|`~-=_+\"'•0123456789"
@@ -48,11 +49,11 @@ def write_output(count_words):
 
     with open(f'{file_path}glossary_50.txt', 'w', encoding='utf_8') as f:
         for word in sorted_count_words.keys():
-            #if not word.startswith('palabrastfidf'):
-            f.write(f'{word},\n')
+            if not word.startswith('palabrastfidf'):
+                f.write(f'{word},\n')
 
 def main(path_data, excluded=None):
-    files = os.listdir(path_data)
+    files = np.sort(os.listdir(path_data))
     res  = dict()
 
     for file in files:
