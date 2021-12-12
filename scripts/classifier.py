@@ -93,7 +93,7 @@ def get_category_count_vector(path, glossary):
         #print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
 
-def main(path_data, excluded=None, glossary_path=None, contador_outputs=None, similarities_path = None):
+def main(path_data, glossary_path=None, contador_outputs=None, similarities_path = None):
     glossary = read_text(glossary_path)
     glossary_dictionary = dict()
     glossary_dictionary = get_glossary_dictionary(glossary, glossary_dictionary)
@@ -107,10 +107,16 @@ def main(path_data, excluded=None, glossary_path=None, contador_outputs=None, si
     accuracy_table = pd.DataFrame()
     file_index = []
     similarity_list = []
+
+    
+
     for category in os.listdir(path_data):
         categories.append(category)
         path_category = f'./{path_data}/{category}/test/'
         files = os.listdir(path_category)
+        if not os.path.exists(f'{similarities_path}/{category}'):
+            os.makedirs(f'{similarities_path}/{category}')
+        
 
         for file in files:
             file_index.append(category + file)
@@ -126,6 +132,7 @@ def main(path_data, excluded=None, glossary_path=None, contador_outputs=None, si
             file_vectors.append(vector_file)
 
 
+
             with open(f'{path_category}{file}', 'r', encoding='utf_8') as originalFile, open(f'{similarities_path}{category}{file}', 'a', encoding='utf_8') as copiedFile:
                 for line in originalFile:
                     copiedFile.write(line)
@@ -138,7 +145,6 @@ def main(path_data, excluded=None, glossary_path=None, contador_outputs=None, si
     accuracy_table = accuracy_table.set_index('Documentos')
 
     txts = os.listdir(contador_outputs)
-    category_vector_dictionary = dict()
     for category_txt in txts:
         category_vectors.append(get_category_vector(f'{contador_outputs}{category_txt}', glossary_dictionary))
 
@@ -162,6 +168,7 @@ def main(path_data, excluded=None, glossary_path=None, contador_outputs=None, si
             category_counter += 1
         predicted_categories.append(predicted_category)
         similarity_list.append(max_value)
+
 
         copiedFile_path = similarities_path + file_index[counter]
         new_name =str(similarities_path) +str('/') + str(predicted_category) +str('/')  + str('similaridad') + str(' - ') + str(max_value*100) + str(' - ') + str(file_index[counter])
@@ -197,4 +204,4 @@ def main(path_data, excluded=None, glossary_path=None, contador_outputs=None, si
 
 if __name__ == '__main__':
     # Get the current working directory
-    _ = main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossaries/glossary_50.txt', contador_outputs = '../data/outputs/word_counter/', similarities_path = '../data/outputs/ordered_by_similarity/')
+    _ = main('../data/dataset', glossary_path	 ='../data/outputs/glossaries/glossary_50.txt', contador_outputs = '../data/outputs/word_counter/', similarities_path = '../data/outputs/ordered_by_similarity/')
