@@ -2,7 +2,7 @@ import os
 import shutil
 from tkinter import *
 from tkinter import messagebox
-from scripts import generate_dataset, get_words_count, tf_idf_calculator, full_glossary_creator, classifier
+import generate_dataset, get_words_count, tf_idf_calculator, full_glossary_creator, classifier
 
 
 def button_generate_dataset():
