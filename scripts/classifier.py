@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 import numpy as np
 
 def remove_special_characters(text):
@@ -8,7 +9,6 @@ def remove_special_characters(text):
     return text
 
 def read_text(path):
-
     with open(path, 'r', encoding='utf_8') as f:
         text = f.read()
 
@@ -44,13 +44,13 @@ def delete_excluded_words(path, sorted_count_words):
 
     return sorted_count_words
 
-def write_output(count_words, category):
+def write_output(count_words, category, file_name):
 
-    file_path = '../data/outputs/'
-    if not os.path.exists(file_path):
-        os.makedirs(file_path)
+    file_path = '../data/outputs/test/'
+    if not os.path.exists(file_path+category):
+        os.makedirs(file_path+category)
 
-    with open(f'{file_path}test/{category}', 'a+', encoding='utf_8') as f:
+    with open(f'{file_path}{category}{file_name}', 'a+', encoding='utf_8') as f:
         for word in count_words.keys():
             f.write(f'{word},{count_words[word]}\n')
 
@@ -74,7 +74,6 @@ def get_category_vector(path, glossary):
         for value in vector_category:
             vector_category[contador] = value/max_value
             contador += 1
-        print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
 
 def get_category_count_vector(path, glossary):
@@ -89,10 +88,9 @@ def get_category_count_vector(path, glossary):
                 vector_values.append(0)
 
         vector_category = np.array(vector_values, dtype=float)
-        print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
-        
-def main(path_data, excluded=None, glossary_path=None, category_glossaries=None):
+
+def main(path_data, glossary_path=None, contador_outputs=None, similarities_path = None):
     glossary = read_text(glossary_path)
     glossary_dictionary = dict()
     glossary_dictionary = get_glossary_dictionary(glossary, glossary_dictionary)
@@ -102,12 +100,20 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
     file_vectors = []
     real_categories = []
 
-    for category in os.listdir(path_data):
+    accuracy_table = pd.DataFrame()
+    file_index = []
+    similarity_list = []
+
+    for category in np.sort(os.listdir(path_data)):
         categories.append(category)
         path_category = f'./{path_data}/{category}/test/'
-        files = os.listdir(path_category)
+        files = np.sort(os.listdir(path_category))
+        if not os.path.exists(f'{similarities_path}/{category}'):
+            os.makedirs(f'{similarities_path}/{category}')
+        
 
         for file in files:
+            file_index.append(category + file)
             real_categories.append(category)
             path_file = f'{path_category}{file}'
             words = read_text(path_file)
@@ -119,25 +125,26 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
             vector_file = np.array(file_values, dtype=float)
             file_vectors.append(vector_file)
 
-            print('category: '+category+' vector: ' + str(vector_file))
-            write_output(res, category+'/'+file)
 
-    #COMMENTED: CATEGORY VECTORS WITH TF-IDF
 
-    #csvs = os.listdir(category_glossaries)
-    #category_vector_dictionary = dict()
-    #for category_csv in csvs:
-        #category_vectors.append(get_category_vector(f'{category_glossaries}{category_csv}', glossary_dictionary))
+            with open(f'{path_category}{file}', 'r', encoding='utf_8') as originalFile, open(f'{similarities_path}{category}{file}', 'a', encoding='utf_8') as copiedFile:
+                for line in originalFile:
+                    copiedFile.write(line)
 
-    contador_outputs = '../data/outputs/contador/'
-    txts = os.listdir(contador_outputs)
-    category_vector_dictionary = dict()
+            write_output(res, category, file)
+        print('Document length: ' + str(len(file_index)))
+    accuracy_table['Documentos'] = list(file_index)
+    print('Final Document length: ' + str(len(file_index)))
+    accuracy_table = accuracy_table.set_index('Documentos')
+
+    txts = np.sort(os.listdir(contador_outputs))
     for category_txt in txts:
         category_vectors.append(get_category_vector(f'{contador_outputs}{category_txt}', glossary_dictionary))
 
     counter = 0
     right_guesses_counter = 0
     category_right_guesses = dict()
+    predicted_categories = []
     for vector in file_vectors:
         category_counter = 0
         max_value = 0
@@ -148,8 +155,17 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
             if similarity >= max_value:
                 max_value = similarity
                 predicted_category = categories[category_counter]
-            #print('file'+str(counter)+ ' '+ str(categories[category_counter])+ ': ' + str(similarity))
+
             category_counter += 1
+        predicted_categories.append(predicted_category)
+        similarity_list.append(max_value)
+
+
+        copiedFile_path = similarities_path + file_index[counter]
+        new_name =str(similarities_path) +str('/') + str(predicted_category) +str('/')  + str('similaridad') + str(' - ') + str(max_value*100) + str(' - ') + str(file_index[counter])
+        os.rename(copiedFile_path, new_name)
+
+
         real_category = real_categories[counter]
         print('file'+str(counter)+ ' predicted_category: '+ predicted_category + ' real_category: ' + real_category)
         if predicted_category == real_category:
@@ -161,12 +177,24 @@ def main(path_data, excluded=None, glossary_path=None, category_glossaries=None)
         counter += 1
     total_size = len(file_vectors)
     accuracy = right_guesses_counter / total_size
+    print('\n------------------')
     print('overall accuracy: ' + str(accuracy))
+    accuracy_category = dict()
     for category in category_right_guesses:
-        print(category + " accuracy: " + str(category_right_guesses[category]/(total_size/3)))
+        accuracy_table['Predicción'] = list(predicted_categories)
+        accuracy_table['Similitud'] = list(similarity_list)
+        accuracy_cat = category_right_guesses[category]/(total_size/3)
+        accuracy_category[category] = accuracy_cat
+        print(category + " accuracy: " + str(accuracy_cat))
+
+    accuracy_table.to_csv(f'../data/outputs/similarity.csv')
+    print('------------------\n')
+
+    print('Classification finished')
+    return accuracy, accuracy_category
 
 
 
 if __name__ == '__main__':
     # Get the current working directory
-    main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossary_50.txt', category_glossaries = '../data/outputs/tf-idf/50/')
+    _ = main('../data/dataset', glossary_path	 ='../data/outputs/glossaries/glossary_50.txt', contador_outputs = '../data/outputs/word_counter/', similarities_path = '../data/outputs/ordered_by_similarity/')

@@ -1,7 +1,8 @@
 import os
+import numpy as np
 
 def remove_special_characters(text):
-    special_characters = '!¡¿?«»“”@#$%^&*()[]{};:,./<>?\|`~-=_+"•0123456789'
+    special_characters = "!¡¿?«»“”@#$%^&*()[]{};:,./<>?\|`~-=_+\"'•0123456789"
     for character in special_characters:
         text = text.replace(character, '')
     return text
@@ -52,7 +53,7 @@ def write_output(count_words):
                 f.write(f'{word},\n')
 
 def main(path_data, excluded=None):
-    files = os.listdir(path_data)
+    files = np.sort(os.listdir(path_data))
     res  = dict()
 
     for file in files:
@@ -65,6 +66,8 @@ def main(path_data, excluded=None):
     
    
         write_output(res)
+        
+    print('Glossary created successfully')
 
 if __name__ == '__main__':
     # Get the current working directory

@@ -1,7 +1,7 @@
 import os
 
 def remove_special_characters(text):
-    special_characters = '!¡¿?«»“”@#$%^&*()[]{};:,./<>?\|`~-=_+"•0123456789'
+    special_characters = "!¡¿?«»“”@#$%^&*()[]{};:,./<>?\|`~-=_+\"'•0123456789"
     for character in special_characters:
         text = text.replace(character, '')
     return text
@@ -39,9 +39,9 @@ def delete_excluded_words(path, sorted_count_words):
     return sorted_count_words
 
 def write_output(count_words, category):
-    sorted_count_words = dict(sorted(count_words.items(), key=lambda x: x[1], reverse=True))
+    sorted_count_words = dict(sorted(count_words.items(), key=lambda x: (x[1], x), reverse=True))
+    file_path = '../data/outputs/word_counter/'
 
-    file_path = '../data/outputs/'
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
@@ -64,6 +64,8 @@ def main(path_data, excluded=None):
                 res = delete_excluded_words(excluded, res)
 
             write_output(res, category)
+
+    print('Words counted succesfully')
 
 if __name__ == '__main__':
     # Get the current working directory
