@@ -47,7 +47,7 @@ def delete_excluded_words(path, sorted_count_words):
 
 def write_output(count_words, category, file_name):
 
-    file_path = './data/outputs/test/'
+    file_path = '../data/outputs/test/'
     if not os.path.exists(file_path+category):
         os.makedirs(file_path+category)
 
@@ -110,10 +110,10 @@ def main(path_data, glossary_path=None, contador_outputs=None, similarities_path
 
     
 
-    for category in os.listdir(path_data):
+    for category in np.sort(os.listdir(path_data)):
         categories.append(category)
         path_category = f'./{path_data}/{category}/test/'
-        files = os.listdir(path_category)
+        files = np.sort(os.listdir(path_category))
         if not os.path.exists(f'{similarities_path}/{category}'):
             os.makedirs(f'{similarities_path}/{category}')
         
@@ -144,7 +144,7 @@ def main(path_data, glossary_path=None, contador_outputs=None, similarities_path
     print('Final Document length: ' + str(len(file_index)))
     accuracy_table = accuracy_table.set_index('Documentos')
 
-    txts = os.listdir(contador_outputs)
+    txts = np.sort(os.listdir(contador_outputs))
     for category_txt in txts:
         category_vectors.append(get_category_vector(f'{contador_outputs}{category_txt}', glossary_dictionary))
 
@@ -204,4 +204,4 @@ def main(path_data, glossary_path=None, contador_outputs=None, similarities_path
 
 if __name__ == '__main__':
     # Get the current working directory
-    _ = main('./data/dataset', glossary_path	 ='./data/outputs/glossaries/glossary_50.txt', contador_outputs = './data/outputs/word_counter/', similarities_path = './data/outputs/ordered_by_similarity/')
+    _ = main('../data/dataset', glossary_path	 ='../data/outputs/glossaries/glossary_50.txt', contador_outputs = '../data/outputs/word_counter/', similarities_path = '../data/outputs/ordered_by_similarity/')

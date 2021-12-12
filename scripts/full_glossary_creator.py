@@ -43,7 +43,7 @@ def delete_excluded_words(path, sorted_count_words):
 def write_output(count_words):
     sorted_count_words = dict(sorted(count_words.items(), key=lambda x: x[1], reverse=True))
 
-    file_path = './data/outputs/glossaries/'
+    file_path = '../data/outputs/glossaries/'
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
@@ -69,4 +69,4 @@ def main(path_data, excluded=None):
 
 if __name__ == '__main__':
     # Get the current working directory
-    main('./data/outputs/tf-idf/50/', excluded='./stop_words.txt')
+    main('../data/outputs/tf-idf/50/', excluded='../stop_words.txt')

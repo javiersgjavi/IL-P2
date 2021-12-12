@@ -188,7 +188,7 @@ def get_glosaries_100(data, path):
         data_category.iloc[:100].to_csv(f'{path_100}{category}.csv')
 
 def main(path):
-    path_output = './data/outputs/tf-idf/'
+    path_output = '../data/outputs/tf-idf/'
     if not os.path.exists(path_output):
         os.makedirs(path_output)
 
