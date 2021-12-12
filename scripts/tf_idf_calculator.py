@@ -23,6 +23,7 @@ def cargar_palabras(path):
             indice.add(palabra)
 
     data['palabras'] = list(indice)
+    print(len(data['palabras']))
     data = data.set_index('palabras')
 
     for index, f in enumerate(os.listdir(path)):
@@ -188,9 +189,10 @@ def main(path):
         os.makedirs(path_output)
 
     data = cargar_palabras(path)
-    print(data)
+
     data = calculate_idf(data)
     data = calculate_tf_idf(data)
+    
 
     data.to_csv(f'{path_output}/tf-idf.csv')
 

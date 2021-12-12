@@ -204,4 +204,4 @@ def main(path_data, glossary_path=None, contador_outputs=None, similarities_path
 
 if __name__ == '__main__':
     # Get the current working directory
-    _ = main('../data/dataset', glossary_path	 ='../data/outputs/glossaries/glossary_50.txt', contador_outputs = '../data/outputs/word_counter/', similarities_path = '../data/outputs/ordered_by_similarity/')
+    _ = main('./data/dataset', glossary_path	 ='./data/outputs/glossaries/glossary_50.txt', contador_outputs = './data/outputs/word_counter/', similarities_path = './data/outputs/ordered_by_similarity/')
