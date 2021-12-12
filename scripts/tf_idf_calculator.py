@@ -6,11 +6,13 @@ warnings.filterwarnings('ignore')
 
 
 def cargar_palabras(path):
+    print(path)
     data = pd.DataFrame()
     output = dict()
 
     # Read outputs data
-    for index, f in enumerate(os.listdir(path)):
+    for index, f in enumerate(np.sort(os.listdir(path))):
+        print(f)
         data_file = pd.read_csv(f'{path}{f}', header=None)
         output[index] = data_file.iloc[:100]
 
@@ -53,12 +55,7 @@ def calculate_idf(data):
     data['idf'] = idf_values
     return data
 
-
-
-
 def calculate_tf_idf(data):
-
-
     categories = data.columns[:-1]
     for category in categories:
         max_value = np.max(data[category])
@@ -88,6 +85,7 @@ def get_glosaries(data, path):
 
         data_category.to_csv(f'{path_all}{category}.csv')
         data_category.iloc[:30].to_csv(f'{path_30}{category}.csv')
+
 def get_glosaries_40(data, path):
 
     path_all = f'{path}/todos_40/'
@@ -103,6 +101,7 @@ def get_glosaries_40(data, path):
 
         data_category.to_csv(f'{path_all}{category}.csv')
         data_category.iloc[:40].to_csv(f'{path_40}{category}.csv')
+
 def get_glosaries_45(data, path):
 
     path_all = f'{path}/todos_45/'
@@ -118,6 +117,7 @@ def get_glosaries_45(data, path):
 
         data_category.to_csv(f'{path_all}{category}.csv')
         data_category.iloc[:45].to_csv(f'{path_45}{category}.csv')
+
 def get_glosaries_50(data, path):
 
     path_all = f'{path}/todos_50/'
@@ -133,6 +133,7 @@ def get_glosaries_50(data, path):
 
         data_category.to_csv(f'{path_all}{category}.csv')
         data_category.iloc[:50].to_csv(f'{path_50}{category}.csv')
+
 def get_glosaries_60(data, path):
 
     path_all = f'{path}/todos_60/'
@@ -148,6 +149,7 @@ def get_glosaries_60(data, path):
 
         data_category.to_csv(f'{path_all}{category}.csv')
         data_category.iloc[:60].to_csv(f'{path_60}{category}.csv')
+
 def get_glosaries_75(data, path):
 
     path_all = f'{path}/todos_75/'
@@ -163,6 +165,7 @@ def get_glosaries_75(data, path):
 
         data_category.to_csv(f'{path_all}{category}.csv')
         data_category.iloc[:75].to_csv(f'{path_75}{category}.csv')
+
 def get_glosaries_100(data, path):
 
     path_all = f'{path}/todos_100/'
@@ -178,12 +181,14 @@ def get_glosaries_100(data, path):
 
         data_category.to_csv(f'{path_all}{category}.csv')
         data_category.iloc[:100].to_csv(f'{path_100}{category}.csv')
+
 def main(path):
     path_output = './data/outputs/tf-idf/'
     if not os.path.exists(path_output):
         os.makedirs(path_output)
 
     data = cargar_palabras(path)
+    print(data)
     data = calculate_idf(data)
     data = calculate_tf_idf(data)
 
@@ -193,4 +198,4 @@ def main(path):
 
 
 if __name__ == '__main__':
-    main('../data/outputs/contador/')
+    main('../data/outputs/word_counter/')
