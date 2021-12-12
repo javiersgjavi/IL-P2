@@ -6,26 +6,21 @@ warnings.filterwarnings('ignore')
 
 
 def cargar_palabras(path):
-    print(path)
     data = pd.DataFrame()
     output = dict()
 
     # Read outputs data
     for index, f in enumerate(np.sort(os.listdir(path))):
-        print(f)
         data_file = pd.read_csv(f'{path}{f}', header=None)
-        print(data_file.head())
         output[index] = data_file.iloc[:100]
 
     indice = set()
     for i in range(len(output)):
         palabras = output[i][0]
-        print(palabras.tolist(), len(palabras))
         for palabra in palabras:
             indice.add(palabra)
 
     data['palabras'] = list(indice)
-    print(len(data['palabras']))
     data = data.set_index('palabras')
 
     for index, f in enumerate(os.listdir(path)):
@@ -35,12 +30,18 @@ def cargar_palabras(path):
 
         for palabra in data.index:
             if palabra in palabras_categoria.index:
+                if palabra == 'número':
+                    print(palabras_categoria.loc[palabra].values[0])
+                    print(column_values)
                 column_values.append(palabras_categoria.loc[palabra].values[0])
 
             else:
                 column_values.append(0)
 
+        print(column_values)
+
         data[column_name] = column_values
+        print(data.loc['número'])
 
     return data
 
@@ -132,7 +133,8 @@ def get_glosaries_50(data, path):
         os.makedirs(path_50)
 
     for category in data.columns[-3:]:
-        data_category = data[category].sort_values(ascending=False)
+        print(data)
+        data_category = data.sort_values(by=[category, 'palabras'], ascending=(False, True))[category]
 
         data_category.to_csv(f'{path_all}{category}.csv')
         data_category.iloc[:50].to_csv(f'{path_50}{category}.csv')
