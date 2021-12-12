@@ -93,7 +93,7 @@ def get_category_count_vector(path, glossary):
         #print('VECTOR CATEGORY: ' + str(vector_category) + ' size: '+ str(vector_category.size))
         return vector_category
 
-def main(path_data, excluded=None, glossary_path=None, contador_outputs=None):
+def main(path_data, excluded=None, glossary_path=None, contador_outputs=None, similarities_path = None):
     glossary = read_text(glossary_path)
     glossary_dictionary = dict()
     glossary_dictionary = get_glossary_dictionary(glossary, glossary_dictionary)
@@ -124,6 +124,11 @@ def main(path_data, excluded=None, glossary_path=None, contador_outputs=None):
                 file_values.append(res[word])
             vector_file = np.array(file_values, dtype=float)
             file_vectors.append(vector_file)
+
+
+            with open(f'{path_category}{file}', 'r', encoding='utf_8') as originalFile, open(f'{similarities_path}{category}{file}', 'a', encoding='utf_8') as copiedFile:
+                for line in originalFile:
+                    copiedFile.write(line)
 
             #print('category: '+category+' vector: ' + str(vector_file))
             write_output(res, category, file)
@@ -157,6 +162,12 @@ def main(path_data, excluded=None, glossary_path=None, contador_outputs=None):
             category_counter += 1
         predicted_categories.append(predicted_category)
         similarity_list.append(max_value)
+
+        copiedFile_path = similarities_path + file_index[counter]
+        new_name =str(similarities_path) +str('/') + str(predicted_category) +str('/')  + str('similaridad') + str(' - ') + str(max_value*100) + str(' - ') + str(file_index[counter])
+        os.rename(copiedFile_path, new_name)
+
+
         real_category = real_categories[counter]
         print('file'+str(counter)+ ' predicted_category: '+ predicted_category + ' real_category: ' + real_category)
         if predicted_category == real_category:
@@ -176,7 +187,6 @@ def main(path_data, excluded=None, glossary_path=None, contador_outputs=None):
         accuracy_cat = category_right_guesses[category]/(total_size/3)
         accuracy_category[category] = accuracy_cat
         print(category + " accuracy: " + str(accuracy_cat))
-
     #accuracy_table = data[category].sort_values(ascending=False)
 
     accuracy_table.to_csv(f'./data/outputs/similarity.csv')
@@ -187,4 +197,4 @@ def main(path_data, excluded=None, glossary_path=None, contador_outputs=None):
 
 if __name__ == '__main__':
     # Get the current working directory
-    _ = main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossaries/glossary_50.txt', contador_outputs = '../data/outputs/word_counter/')
+    _ = main('../data/dataset', excluded='../stop_words.txt', glossary_path	 ='../data/outputs/glossaries/glossary_50.txt', contador_outputs = '../data/outputs/word_counter/', similarities_path = '../data/outputs/ordered_by_similarity/')

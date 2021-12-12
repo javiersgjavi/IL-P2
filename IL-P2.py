@@ -22,7 +22,7 @@ def button_glossary():
     messagebox.showinfo("Generate_glossary", "Glossary generated successfully")
 
 def button_classifier():
-    accuracy, cat_accuracy = classifier.main('./data/dataset', excluded='./stop_words.txt', glossary_path='./data/outputs/glossaries/glossary_50.txt', contador_outputs='./data/outputs/word_counter/')
+    accuracy, cat_accuracy = classifier.main('./data/dataset', excluded='./stop_words.txt', glossary_path='./data/outputs/glossaries/glossary_50.txt', contador_outputs='./data/outputs/word_counter/', similarities_path = './data/outputs/ordered_by_similarity/')
     message = f'Accuracy = {accuracy}\n\nAccuracy by category:\n'
     for category in cat_accuracy.keys():
         message += f'\n\t{category} = {str(cat_accuracy[category])}'
